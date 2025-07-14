@@ -1,123 +1,32 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Backgammon - Face to Face</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: #2d2d2d;
-    }
-    canvas {
-      border: 2px solid #fff;
-      touch-action: none;
-    }
-    #rollButton {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 1rem 2rem;
-      font-size: 1.5rem;
-      z-index: 10;
-    }
-  </style>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Face-to-Face Backgammon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React Libraries -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel Standalone for in-browser transpilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/"
+  }
+}
+</script>
 </head>
-<body>
-  <canvas id="board" width="800" height="500"></canvas>
-  <button id="rollButton">Roll Dice</button>
-  <script>
-    const canvas = document.getElementById("board");
-    const ctx = canvas.getContext("2d");
-    const rollButton = document.getElementById("rollButton");
-    let dice = [1, 2];
-
-    const drawBoard = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const triangleWidth = canvas.width / 14;
-      const triangleHeight = canvas.height / 2;
-
-      // Background
-      ctx.fillStyle = "#d2b48c";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Triangles
-      for (let i = 0; i < 12; i++) {
-        let x = (i < 6) ? i * triangleWidth : canvas.width - (i - 6 + 1) * triangleWidth;
-        let y = 0;
-        drawTriangle(x, y, triangleWidth, triangleHeight, i % 2 === 0 ? "#802" : "#f00");
-      }
-
-      for (let i = 0; i < 12; i++) {
-        let x = (i < 6) ? i * triangleWidth : canvas.width - (i - 6 + 1) * triangleWidth;
-        let y = canvas.height;
-        drawTriangle(x, y, triangleWidth, -triangleHeight, i % 2 === 0 ? "#802" : "#f00");
-      }
-
-      // Dice
-      drawDice();
-    };
-
-    const drawTriangle = (x, y, width, height, color) => {
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + width / 2, y + height);
-      ctx.lineTo(x + width, y);
-      ctx.closePath();
-      ctx.fillStyle = color;
-      ctx.fill();
-    };
-
-    const drawDice = () => {
-      const size = 40;
-      const startX = canvas.width / 2 - size - 10;
-      const startY = canvas.height / 2 - size / 2;
-
-      for (let i = 0; i < 2; i++) {
-        ctx.fillStyle = "white";
-        ctx.fillRect(startX + i * (size + 20), startY, size, size);
-        ctx.strokeStyle = "black";
-        ctx.strokeRect(startX + i * (size + 20), startY, size, size);
-
-        drawDots(startX + i * (size + 20), startY, size, dice[i]);
-      }
-    };
-
-    const drawDots = (x, y, size, number) => {
-      ctx.fillStyle = "black";
-      const dot = (dx, dy) => ctx.beginPath(), ctx.arc(x + dx, y + dy, 4, 0, 2 * Math.PI), ctx.fill();
-      const center = size / 2;
-
-      const positions = [
-        [],
-        [[center, center]],
-        [[center - 10, center - 10], [center + 10, center + 10]],
-        [[center - 10, center - 10], [center, center], [center + 10, center + 10]],
-        [[center - 10, center - 10], [center + 10, center - 10], [center - 10, center + 10], [center + 10, center + 10]],
-        [[center - 10, center - 10], [center + 10, center - 10], [center, center], [center - 10, center + 10], [center + 10, center + 10]],
-        [[center - 10, center - 10], [center + 10, center - 10], [center - 10, center], [center + 10, center], [center - 10, center + 10], [center + 10, center + 10]]
-      ];
-
-      positions[number].forEach(([dx, dy]) => {
-        ctx.beginPath();
-        ctx.arc(x + dx - size / 2, y + dy - size / 2, 4, 0, 2 * Math.PI);
-        ctx.fill();
-      });
-    };
-
-    rollButton.addEventListener("click", () => {
-      dice = [1 + Math.floor(Math.random() * 6), 1 + Math.floor(Math.random() * 6)];
-      drawBoard();
-    });
-
-    drawBoard();
-  </script>
-</body>
+  <body>
+    <div id="root"></div>
+    <!-- The type is changed to "text/babel" so Babel can transpile it -->
+    <script type="text/babel" src="/index.tsx"></script>
+  </body>
 </html>
